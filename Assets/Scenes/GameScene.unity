@@ -432,6 +432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d67c99b686c971a44b66a8ec33f0ebd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 759396333}
   moveSpeed: 3
 --- !u!50 &566284739
 Rigidbody2D:
@@ -806,6 +807,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 322df862d9a837f4abbdfc0716c7dbe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialY: -3.15
+  kabukaIncrease: 10
   moneyText: {fileID: 1010983252}
   kabukaText: {fileID: 616424892}
   timeText: {fileID: 1063009697}

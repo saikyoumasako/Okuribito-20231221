@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4784684077120802598}
   m_Layer: 0
   m_Name: "\u30AB\u30D6\u7F8E"
-  m_TagString: Kabu
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

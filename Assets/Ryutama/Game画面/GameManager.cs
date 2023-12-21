@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     private float kabuka = 100f;
     private float gameTime = 180f;
 
+    public float initialY = -3.15f; // 初期のY座標
+    public float kabukaIncrease = 10; // Y座標が増加するごとのkabukaの増加量
+
     public TMPro.TMP_Text moneyText;
     public TMPro.TMP_Text kabukaText;
     public TMPro.TMP_Text timeText;
@@ -44,9 +47,21 @@ public class GameManager : MonoBehaviour
         moneyText.text =  Mathf.Floor(money).ToString();
     }
 
-    public void Kabukachange()
+    public void Kabukachange(float Yposition)
     {
+        Debug.Log(Yposition);
+        if(Yposition > initialY)
+        {
+            int newYIncreases = Mathf.FloorToInt((Yposition - initialY) + 3.15f); // 増加したY座標の個数
+            Debug.Log(newYIncreases);
+            float kabukaIncreasevalue = newYIncreases * kabukaIncrease; // kabukaの増加量
+            kabuka += kabukaIncreasevalue;
 
+            UpdateTexts();
+
+            // Y座標を初期化する
+            initialY = Yposition;
+        }
     }
 
     public void MoneyIncrease(int value)
