@@ -72,13 +72,14 @@ public class Kabu : MonoBehaviour
                 {
                     TrySpawnNextKabu();
                 }
-                if (stopTime < 1.5F)
+
+            }
+            if (stopTime <= 1.5F)
+            {
+                stopTimecount += Time.deltaTime;
+                if (stopTimecount > 3f)
                 {
-                    stopTimecount += Time.deltaTime;
-                    if(stopTimecount > 3f)
-                    {
-                        TrySpawnNextKabu();
-                    }
+                    TrySpawnNextKabu();
                 }
             }
             //カブが落下した場合の処理
@@ -86,6 +87,7 @@ public class Kabu : MonoBehaviour
             {
                 TrySpawnNextKabu();
                 gameManager.MoneyDecrease(value);
+                gameManager.FallKabuka(value);
                 Destroy(this.gameObject);
             }
         }
@@ -94,14 +96,14 @@ public class Kabu : MonoBehaviour
 
     }
 
-    void TrySpawnNextKabu()
+    void TrySpawnNextKabu()　//カブ生成
     {
         if (preaseSpawn)
         {
             gameObject.tag = "Kabu"; //タグをkabuに変える
 
             spawner.CallSpawnKabu();
-            Debug.Log("カブ生成");
+            //Debug.Log("カブ生成");
             gameManager.MoneyIncrease(value);
             preaseSpawn = false;
         }

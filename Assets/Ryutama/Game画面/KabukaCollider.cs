@@ -11,15 +11,24 @@ public class KabukaCollider : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //GameManager gameManager = GameObject.FindObjectOfType<GameManager>();
-
-        initialPosition = transform.position; // 初期位置を設定
+        initialPosition = transform.position; // 初期位置を設定    }
     }
-
     // Update is called once per frame
     void Update()
     {
         MoveCollider(); // コライダーを下に移動
+    }
+
+    public void InitialPosition(float increase)
+    {
+        // オブジェクトの現在の位置を取得
+        Vector3 currentPosition = initialPosition;
+
+        // Y座標を指定された分だけ増加させる
+        currentPosition.y += increase * 0.8f;
+
+        // 新しい位置を設定
+        initialPosition = currentPosition;
     }
 
     private void MoveCollider()
