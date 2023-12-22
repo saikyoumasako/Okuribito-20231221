@@ -414,8 +414,8 @@ Transform:
   m_GameObject: {fileID: 566284735}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.010011495, y: -1.01, z: 1.1889821}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 1.5875, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 382020431}
@@ -432,6 +432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d67c99b686c971a44b66a8ec33f0ebd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 759396333}
   moveSpeed: 3
 --- !u!50 &566284739
 Rigidbody2D:
@@ -806,6 +807,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 322df862d9a837f4abbdfc0716c7dbe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCamera: {fileID: 519420028}
+  kabuSpawner: {fileID: 382020429}
+  kabukaColliderOb: {fileID: 566284735}
+  increaseRange: 1
+  initialY: -3.15
+  kabukaIncrease: 10
   moneyText: {fileID: 1010983252}
   kabukaText: {fileID: 616424892}
   timeText: {fileID: 1063009697}
@@ -1300,8 +1307,8 @@ Transform:
   m_GameObject: {fileID: 1208148596}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.15, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalScale: {x: 1.6, y: 1.6, z: 1.6}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}

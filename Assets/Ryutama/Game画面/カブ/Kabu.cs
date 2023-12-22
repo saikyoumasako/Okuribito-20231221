@@ -17,6 +17,7 @@ public class Kabu : MonoBehaviour
     public float Kaburotation = 100f;
 
     private float stopTime = 0f;
+    private float stopTimecount = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -65,19 +66,28 @@ public class Kabu : MonoBehaviour
             if (Mathf.Approximately(rb.velocity.magnitude, 0f))
             { 
                 stopTime += Time.deltaTime;
-                    //1.5秒経過したらカブを呼び出す
-                    if (stopTime > 1.5f)
-                    {
-                        TrySpawnNextKabu();
-                
-                    }
+
+                //1.5秒経過したらカブを呼び出す
+                if (stopTime > 1.5f)
+                {
+                    TrySpawnNextKabu();
+                }
+
+            }
+            if (stopTime <= 1.5F)
+            {
+                stopTimecount += Time.deltaTime;
+                if (stopTimecount > 3f)
+                {
+                    TrySpawnNextKabu();
+                }
             }
             //カブが落下した場合の処理
             if (transform.position.y < -12)
             {
-
                 TrySpawnNextKabu();
                 gameManager.MoneyDecrease(value);
+                gameManager.FallKabuka(value);
                 Destroy(this.gameObject);
             }
         }
@@ -86,11 +96,14 @@ public class Kabu : MonoBehaviour
 
     }
 
-    void TrySpawnNextKabu()
+    void TrySpawnNextKabu()　//カブ生成
     {
         if (preaseSpawn)
         {
+            gameObject.tag = "Kabu"; //タグをkabuに変える
+
             spawner.CallSpawnKabu();
+            //Debug.Log("カブ生成");
             gameManager.MoneyIncrease(value);
             preaseSpawn = false;
         }
