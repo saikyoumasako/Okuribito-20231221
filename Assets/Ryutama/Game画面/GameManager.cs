@@ -8,17 +8,17 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject mainCamera; // ƒJƒƒ‰ƒIƒuƒWƒFƒNƒg‚ÌQÆ
-    public GameObject kabuSpawner; // ƒJƒuƒXƒ|ƒi[‚ÌQÆ
-    public GameObject kabukaColliderOb;//ƒJƒuƒRƒ‰ƒCƒ_[‚ÌQÆ
+    public GameObject mainCamera; // ã‚«ãƒ¡ãƒ©ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‚ç…§
+    public KabuSpawner kabuSpawner; // ã‚«ãƒ–ã‚¹ãƒãƒŠãƒ¼ã®å‚ç…§
+    public KabukaCollider kabukaCollider;//ã‚«ãƒ–ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®å‚ç…§
 
     private float money = 0f;
     private float kabuka = 100f;
     private float fallkabuka = 0f;
-    private float gameTime = 180f;
-    public float increaseRange = 1.5f; // ‘‰Á‚Ìè‡’l‚ğİ’è‚·‚é
-    public float initialY = -3.15f; // ‰Šú‚ÌYÀ•W
-    public float kabukaIncrease = 10f; // YÀ•W‚ª‘‰Á‚·‚é‚²‚Æ‚Ìkabuka‚Ì‘‰Á—Ê
+    public float gameTime = 180f;
+    public float increaseRange = 1.5f; // å¢—åŠ ã®é–¾å€¤ã‚’è¨­å®šã™ã‚‹
+    public float initialY = -3.15f; // åˆæœŸã®Yåº§æ¨™
+    public float kabukaIncrease = 10f; // Yåº§æ¨™ãŒå¢—åŠ ã™ã‚‹ã”ã¨ã®kabukaã®å¢—åŠ é‡
     private float newYIncreases = 0f;
     [SerializeField]private GameObject resultTextObject;
 
@@ -36,13 +36,13 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdateGameTime(); //ŠÔŒo‰ß
+        UpdateGameTime(); //æ™‚é–“çµŒé
     }
 
     private void UpdateGameTime()
@@ -51,41 +51,46 @@ public class GameManager : MonoBehaviour
         {
             gameTime -= Time.deltaTime;
         }
-        // Œo‰ßŠÔ‚ğŒ¸Z
+        // çµŒéæ™‚é–“ã‚’æ¸›ç®—
         if (gameTime <= 0 )
         {
 
-            resultTextObject.SetActive(true); // Œ‹‰Ê‚ÌƒeƒLƒXƒg‚ğ•\¦‚·‚é
-            StartCoroutine(ChangeSceneAfterDelay(3f)); // 3•b‘Ò‚Á‚Ä‚©‚çƒV[ƒ“Ø‚è‘Ö‚¦
+            gameTime = 0; // æ™‚é–“ãŒ0æœªæº€ã«ãªã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
+            // æ™‚é–“åˆ‡ã‚Œæ™‚ã®å‡¦ç†ã‚’è¿½åŠ ï¼ˆã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ãªã©ï¼‰
+            kabuSpawner.SpawnStop();
+
+
+            resultTextObject.SetActive(true); // çµæœã®ãƒ†ã‚­ã‚¹ãƒˆã‚’è¡¨ç¤ºã™ã‚‹
+            StartCoroutine(ChangeSceneAfterDelay(3f)); // 3ç§’å¾…ã£ã¦ã‹ã‚‰ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆ
+
 
         }
-        timeText.text = Mathf.Round(gameTime).ToString(); // ŠÔ‚ğ®”‚Å•\¦
+        timeText.text = Mathf.Round(gameTime).ToString(); // æ™‚é–“ã‚’æ•´æ•°ã§è¡¨ç¤º
        
     }
 
     private System.Collections.IEnumerator ChangeSceneAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay); // 3•b‘Ò‚Â
-        SceneManager.LoadScene("Result"); // ƒV[ƒ“Ø‚è‘Ö‚¦
+        yield return new WaitForSeconds(delay); // 3ç§’å¾…ã¤
+        SceneManager.LoadScene("Result"); // ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆ
     }
-    private void UpdateTexts() //ƒJƒu‰¿‚Æ‘YƒeƒLƒXƒg‚ğ‘‚«Š·‚¦‚é
+    private void UpdateTexts() //ã‚«ãƒ–ä¾¡ã¨è³‡ç”£ãƒ†ã‚­ã‚¹ãƒˆã‚’æ›¸ãæ›ãˆã‚‹
     {
         kabukaText.text = Mathf.Floor(kabuka) + "%".ToString();
         moneyText.text =  Mathf.Floor(money).ToString();
     }
 
-    public void FallKabuka(float fall) //‰º—‚µ‚½ƒJƒu
+    public void FallKabuka(float fall) //ä¸‹è½ã—ãŸã‚«ãƒ–
     {
-        fallkabuka += fall / 10; //—‚¿‚½ƒJƒu‚Ì10•ª‚Ì‚P‚ªƒJƒu‰¿‚©‚çŒ¸‚é
+        fallkabuka += fall / 10; //è½ã¡ãŸã‚«ãƒ–ã®10åˆ†ã®ï¼‘ãŒã‚«ãƒ–ä¾¡ã‹ã‚‰æ¸›ã‚‹
     }
 
-    public void Kabukachange(float Yposition)@//ƒJƒu‰¿‚ğ•Ï‚¦‚é
+    public void Kabukachange(float Yposition)ã€€//ã‚«ãƒ–ä¾¡ã‚’å¤‰ãˆã‚‹
     {
         if(Yposition > initialY)
         {
-            newYIncreases = (Yposition - initialY); // ‘‰Á‚µ‚½YÀ•W‚ÌŒÂ”
-            //Debug.Log(newYIncreases);
-            float kabukaIncreasevalue = newYIncreases * kabukaIncrease; // kabuka‚Ì‘‰Á—Ê
+            newYIncreases = (Yposition - initialY); // å¢—åŠ ã—ãŸYåº§æ¨™ã®å€‹æ•°
+            float kabukaIncreasevalue = newYIncreases * kabukaIncrease; // kabukaã®å¢—åŠ é‡
             kabuka = 100 + kabukaIncreasevalue - fallkabuka;
 
             CheckPosition();
@@ -93,83 +98,77 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void CheckPosition() //ƒJƒu‚Ì‚‚³‚ªˆê’è’lˆÈã’´‚¦‚½‚Æ‚«‚Éˆ—‚ğs‚¤
+    void CheckPosition() //ã‚«ãƒ–ã®é«˜ã•ãŒä¸€å®šå€¤ä»¥ä¸Šè¶…ãˆãŸã¨ãã«å‡¦ç†ã‚’è¡Œã†
     {
         if(newYIncreases > increaseRange)
         {
             if (!positionUp)
             {
-                CameraPosition();
-                KabuSpawnerPosition();
-                kabukaIncrease = kabukaIncrease * 2;
+                UpdatePosition();
                 positionUp = true;
             }
 
         }
-        if (newYIncreases > increaseRange * 2) //2”{
+        if (newYIncreases > increaseRange * 2) //2å€
         {
             if (!positionUpUp)
             {
-                CameraPosition();
-                KabuSpawnerPosition();
-                kabukaIncrease = kabukaIncrease * 2;
-
+                UpdatePosition();
                 positionUpUp = true;
             }
 
         }
-        if (newYIncreases > increaseRange * 3) //3”{
+        if (newYIncreases > increaseRange * 3) //3å€
         {
             if (!positionUpUpUp)
             {
-                CameraPosition();
-                KabuSpawnerPosition();
-                kabukaIncrease = kabukaIncrease * 2;
-
+                UpdatePosition();
                 positionUpUpUp = true;
             }
 
         }
-        if (newYIncreases > increaseRange * 4) //4”{
+        if (newYIncreases > increaseRange * 4) //4å€
         {
             if (!positionUpUpUpUp)
             {
-                CameraPosition();
-                KabuSpawnerPosition();
-                kabukaIncrease = kabukaIncrease * 2;
-
+                UpdatePosition();
                 positionUpUpUpUp = true;
             }
 
         }
-
-
     }
 
-    void CameraPosition()         // ƒJƒƒ‰ƒIƒuƒWƒFƒNƒg‚ÌYÀ•W‚ğXV
+    void UpdatePosition() //ã‚«ãƒ¡ãƒ©ã¨ã‚«ãƒ–ã‚¹ãƒãƒ¼ãƒ³ãƒã‚¸ã‚·ãƒ§ãƒ³é–¢æ•°ã‚’å‘¼ã³å‡ºã™
     {
-        float cameraY = mainCamera.transform.position.y; // Œ»İ‚ÌYÀ•W‚ğæ“¾
-        float cameraYposition = cameraY + (increaseRange / 2); // newYIncreases•ª‚¾‚¯YÀ•W‚ğ‘‰Á
+        CameraPosition();
+        KabuSpawnerPosition();
+        kabukaIncrease = kabukaIncrease * 2;
+    }
+
+    void CameraPosition()         // ã‚«ãƒ¡ãƒ©ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®Yåº§æ¨™ã‚’æ›´æ–°
+    {
+        float cameraY = mainCamera.transform.position.y; // ç¾åœ¨ã®Yåº§æ¨™ã‚’å–å¾—
+        float cameraYposition = cameraY + (increaseRange / 2); // newYIncreasesåˆ†ã ã‘Yåº§æ¨™ã‚’å¢—åŠ 
         mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, cameraYposition, mainCamera.transform.position.z);
     }
 
-    public void KabuSpawnerPosition() //ƒJƒuƒXƒ|[ƒ“ƒ|ƒWƒVƒ‡ƒ“•ÏX
+    public void KabuSpawnerPosition() //ã‚«ãƒ–ã‚¹ãƒãƒ¼ãƒ³ãƒã‚¸ã‚·ãƒ§ãƒ³å¤‰æ›´
     {
-        float kabuSpawnerY = kabuSpawner.transform.position.y; // Œ»İ‚ÌYÀ•W‚ğæ“¾
+        float kabuSpawnerY = kabuSpawner.transform.position.y; // ç¾åœ¨ã®Yåº§æ¨™ã‚’å–å¾—
         float kabuSpawnerYposition = kabuSpawnerY + (increaseRange * 0.8f);
         kabuSpawner.transform.position = new Vector3(kabuSpawner.transform.position.x, kabuSpawnerYposition, kabuSpawner.transform.position.z);
-        kabukaColliderOb.GetComponent<KabukaCollider>().InitialPosition(increaseRange); //‚©‚Ô‚©ƒRƒ‰ƒCƒ_[‚Ìã¸
+        kabukaCollider.InitialPosition(increaseRange); //ã‹ã¶ã‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ä¸Šæ˜‡
     }
 
 
 
-    public void MoneyIncrease(int value) //‘Y‘‰Á
+    public void MoneyIncrease(int value) //è³‡ç”£å¢—åŠ 
     {
         money += value * (kabuka / 100);
         UpdateTexts();
     }
 
-    public void MoneyDecrease(int value) //‘YŒ¸Z
+    public void MoneyDecrease(int value) //è³‡ç”£æ¸›ç®—
     {
         kabuka -= value / 10;
         money -= value * (kabuka / 100);

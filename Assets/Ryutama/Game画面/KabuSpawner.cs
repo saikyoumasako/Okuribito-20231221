@@ -7,6 +7,8 @@ public class KabuSpawner : MonoBehaviour
 
     public Kabu[] kabuPrefab; // KabuのPrefab
 
+    private bool spawnStop = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,13 +33,20 @@ public class KabuSpawner : MonoBehaviour
             // KabuのPrefabをRespawnPosの位置に生成
             Kabu kabu = Instantiate(kabuPrefab[randomIndex], transform.position, Quaternion.identity);
             kabu.Init(this);
-            // 必要に応じて、Kabuに対して追加の処理を行う
         }
     }
 
-    // この関数はゲーム内で必要な場所で呼び出す必要があります
     public void CallSpawnKabu()
     {
-        SpawnKabu();
+        if (!spawnStop)
+        {
+            SpawnKabu();
+        }
     }
+
+    public void SpawnStop() //残り時間が0になったら呼び出される
+    {
+        spawnStop = true;
+    }
+
 }
