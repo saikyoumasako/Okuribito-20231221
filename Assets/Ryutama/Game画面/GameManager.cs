@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,11 +20,14 @@ public class GameManager : MonoBehaviour
     public float initialY = -3.15f; // 初期のY座標
     public float kabukaIncrease = 10f; // Y座標が増加するごとのkabukaの増加量
     private float newYIncreases = 0f;
+    [SerializeField]private GameObject resultTextObject;
 
     private bool positionUp = false;
     private bool positionUpUp = false;
     private bool positionUpUpUp = false;
     private bool positionUpUpUpUp = false;
+    
+
 
     public TMPro.TMP_Text moneyText;
     public TMPro.TMP_Text kabukaText;
@@ -43,14 +47,26 @@ public class GameManager : MonoBehaviour
 
     private void UpdateGameTime()
     {
-        gameTime -= Time.deltaTime; // 経過時間を減算
-        if (gameTime <= 0)
+        if (gameTime > 0)
         {
-            gameTime = 0; // 時間が0未満にならないようにする
-            // 時間切れ時の処理を追加（ゲームオーバーなど）
+            gameTime -= Time.deltaTime;
+        }
+        // 経過時間を減算
+        if (gameTime <= 0 )
+        {
+
+            resultTextObject.SetActive(true); // 結果のテキストを表示する
+            StartCoroutine(ChangeSceneAfterDelay(3f)); // 3秒待ってからシーン切り替え
 
         }
         timeText.text = Mathf.Round(gameTime).ToString(); // 時間を整数で表示
+       
+    }
+
+    private System.Collections.IEnumerator ChangeSceneAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay); // 3秒待つ
+        SceneManager.LoadScene("Result"); // シーン切り替え
     }
     private void UpdateTexts() //カブ価と資産テキストを書き換える
     {
