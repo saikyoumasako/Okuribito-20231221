@@ -8,13 +8,13 @@ using System;
 public class GameManager : MonoBehaviour
 {
     public GameObject mainCamera; // カメラオブジェクトの参照
-    public GameObject kabuSpawner; // カブスポナーの参照
-    public GameObject kabukaColliderOb;//カブコライダーの参照
+    public KabuSpawner kabuSpawner; // カブスポナーの参照
+    public KabukaCollider kabukaCollider;//カブコライダーの参照
 
     private float money = 0f;
     private float kabuka = 100f;
     private float fallkabuka = 0f;
-    private float gameTime = 180f;
+    public float gameTime = 180f;
     public float increaseRange = 1.5f; // 増加の閾値を設定する
     public float initialY = -3.15f; // 初期のY座標
     public float kabukaIncrease = 10f; // Y座標が増加するごとのkabukaの増加量
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         {
             gameTime = 0; // 時間が0未満にならないようにする
             // 時間切れ時の処理を追加（ゲームオーバーなど）
-
+            kabuSpawner.SpawnStop();
         }
         timeText.text = Mathf.Round(gameTime).ToString(); // 時間を整数で表示
     }
@@ -68,7 +68,6 @@ public class GameManager : MonoBehaviour
         if(Yposition > initialY)
         {
             newYIncreases = (Yposition - initialY); // 増加したY座標の個数
-            //Debug.Log(newYIncreases);
             float kabukaIncreasevalue = newYIncreases * kabukaIncrease; // kabukaの増加量
             kabuka = 100 + kabukaIncreasevalue - fallkabuka;
 
@@ -83,9 +82,7 @@ public class GameManager : MonoBehaviour
         {
             if (!positionUp)
             {
-                CameraPosition();
-                KabuSpawnerPosition();
-                kabukaIncrease = kabukaIncrease * 2;
+                UpdatePosition();
                 positionUp = true;
             }
 
@@ -94,10 +91,7 @@ public class GameManager : MonoBehaviour
         {
             if (!positionUpUp)
             {
-                CameraPosition();
-                KabuSpawnerPosition();
-                kabukaIncrease = kabukaIncrease * 2;
-
+                UpdatePosition();
                 positionUpUp = true;
             }
 
@@ -106,10 +100,7 @@ public class GameManager : MonoBehaviour
         {
             if (!positionUpUpUp)
             {
-                CameraPosition();
-                KabuSpawnerPosition();
-                kabukaIncrease = kabukaIncrease * 2;
-
+                UpdatePosition();
                 positionUpUpUp = true;
             }
 
@@ -118,16 +109,18 @@ public class GameManager : MonoBehaviour
         {
             if (!positionUpUpUpUp)
             {
-                CameraPosition();
-                KabuSpawnerPosition();
-                kabukaIncrease = kabukaIncrease * 2;
-
+                UpdatePosition();
                 positionUpUpUpUp = true;
             }
 
         }
+    }
 
-
+    void UpdatePosition() //カメラとカブスポーンポジション関数を呼び出す
+    {
+        CameraPosition();
+        KabuSpawnerPosition();
+        kabukaIncrease = kabukaIncrease * 2;
     }
 
     void CameraPosition()         // カメラオブジェクトのY座標を更新
@@ -142,7 +135,7 @@ public class GameManager : MonoBehaviour
         float kabuSpawnerY = kabuSpawner.transform.position.y; // 現在のY座標を取得
         float kabuSpawnerYposition = kabuSpawnerY + (increaseRange * 0.8f);
         kabuSpawner.transform.position = new Vector3(kabuSpawner.transform.position.x, kabuSpawnerYposition, kabuSpawner.transform.position.z);
-        kabukaColliderOb.GetComponent<KabukaCollider>().InitialPosition(increaseRange); //かぶかコライダーの上昇
+        kabukaCollider.InitialPosition(increaseRange); //かぶかコライダーの上昇
     }
 
 

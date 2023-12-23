@@ -7,9 +7,11 @@ public class Kabu : MonoBehaviour
     private Rigidbody2D rb;
     private KabuSpawner spawner;
     private GameManager gameManager;
+    private SoundManager soundManager;
 
     private bool canMove = false;
     private bool isDynamic = false;
+    private bool moveStop = false;
     private bool preaseSpawn = true;
 
     public int value = 0;
@@ -23,6 +25,8 @@ public class Kabu : MonoBehaviour
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        soundManager = FindObjectOfType<SoundManager>();
+
         rb = GetComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic; // 最初はKinematicに設定
     }
@@ -30,34 +34,44 @@ public class Kabu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float time = gameManager.gameTime;
+        if (time <= 0)
+        {
+            moveStop = true;
+        }
         if (!isDynamic)
         {
-            // Kinematic状態で左右に移動
-            float horizontalInput = Input.GetAxisRaw("Horizontal");
-            float movementSpeed = kabuspeed; // 移動速度
-
-            Vector2 movement = new Vector2(horizontalInput * movementSpeed * Time.deltaTime, 0);
-            transform.Translate(movement,Space.World);
-
-            // Kinematic状態でZ軸の回転を変更
-            float rotationSpeed = Kaburotation; // 回転速度
-
-            if (Input.GetKey(KeyCode.E))
+            if (!moveStop)
             {
-                transform.Rotate(Vector3.forward, -rotationSpeed * Time.deltaTime);
-            }
-            else if (Input.GetKey(KeyCode.W))
-            {
-                transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
+                // Kinematic状態で左右に移動
+                float horizontalInput = Input.GetAxisRaw("Horizontal");
+                float movementSpeed = kabuspeed; // 移動速度
+
+                Vector2 movement = new Vector2(horizontalInput * movementSpeed * Time.deltaTime, 0);
+                transform.Translate(movement, Space.World);
+
+                // Kinematic状態でZ軸の回転を変更
+                float rotationSpeed = Kaburotation; // 回転速度
+
+                if (Input.GetKey(KeyCode.E))
+                {
+                    transform.Rotate(Vector3.forward, -rotationSpeed * Time.deltaTime);
+                }
+                else if (Input.GetKey(KeyCode.W))
+                {
+                    transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
+                }
+
+                // Spaceキーが押されたら動けるようにする
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    soundManager.SEFall();
+                    canMove = true;
+                    rb.bodyType = RigidbodyType2D.Dynamic; // RigidbodyをDynamicに変更
+                    isDynamic = true;
+                }
             }
 
-            // Spaceキーが押されたら動けるようにする
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                canMove = true;
-                rb.bodyType = RigidbodyType2D.Dynamic; // RigidbodyをDynamicに変更
-                isDynamic = true;
-            }
 
         }
         else
@@ -95,7 +109,6 @@ public class Kabu : MonoBehaviour
 
 
     }
-
     void TrySpawnNextKabu()　//カブ生成
     {
         if (preaseSpawn)
@@ -111,5 +124,10 @@ public class Kabu : MonoBehaviour
     public void Init(KabuSpawner kabu)
     {
         spawner = kabu;
+    }
+
+    public void MoveStop()//これが呼び出されたときカブが動かなくなる
+    {
+        moveStop = true;
     }
 }
