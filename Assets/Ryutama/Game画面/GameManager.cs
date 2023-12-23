@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public KabuSpawner kabuSpawner; // カブスポナーの参照
     public KabukaCollider kabukaCollider;//カブコライダーの参照
 
-    private float money = 0f;
+    public static float money = 0f;
     private float kabuka = 100f;
     private float fallkabuka = 0f;
     public float gameTime = 180f;
@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     public float initialY = -3.15f; // 初期のY座標
     public float kabukaIncrease = 10f; // Y座標が増加するごとのkabukaの増加量
     private float newYIncreases = 0f;
-    [SerializeField]private GameObject resultTextObject;
 
     private bool positionUp = false;
     private bool positionUpUp = false;
@@ -32,11 +31,12 @@ public class GameManager : MonoBehaviour
     public TMPro.TMP_Text moneyText;
     public TMPro.TMP_Text kabukaText;
     public TMPro.TMP_Text timeText;
+    [SerializeField] private GameObject resultTextObject;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        money = 0f;
     }
 
     // Update is called once per frame
@@ -173,5 +173,10 @@ public class GameManager : MonoBehaviour
         kabuka -= value / 10;
         money -= value * (kabuka / 100);
         UpdateTexts();
+    }
+
+    public static float GetMoney()
+    {
+        return money;
     }
 }
